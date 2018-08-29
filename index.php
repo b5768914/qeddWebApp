@@ -253,9 +253,9 @@ setInterval(getAlertDevices,1000);
 		</div>
 
 		<div id="dialog-confirm" title="Datenschutzerklärung">
-			  <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>Diese App sendet Bewegungsdaten (Beschleunigungs- und Lageinformationen) ihres Gerätes ins Internet. 
-			  Die Daten werden zum Zwecke des QUNIS Day 2018 Analytic Showcases erhoben und analysiert. 
-			  Die Daten werden nach dem QUNIS Day 2018 unwiederbrinlich gelöscht. Eine andere Verwendung der Daten findet nicht statt.
+			  <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>Diese App sendet Bewegungsdaten (Beschleunigungs- und Lageinformationen) ihres Gerätes ins Internet. <BR><BR>
+			  Die Daten werden zum Zwecke des QUNIS Day 2018 Analytic Showcases erhoben und analysiert. <BR>
+			  Die Daten werden nach dem QUNIS Day 2018 unwiederbringlich gelöscht. Eine andere Verwendung der Daten findet nicht statt.<BR><BR>
 			Mit klick auf den "Ok" Button akzeptieren Sie diese Bedingungen und starten die Datenübertragung.</p>
 		</div>
 
