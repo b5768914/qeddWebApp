@@ -15,6 +15,7 @@
 		<script>
 		var chart1;
 		var fingerprint = "";
+		var gdpr = false;
 $(function() {
 
 	$( "#dialog-confirm" ).dialog({
@@ -25,6 +26,7 @@ $(function() {
       buttons: {
         "ok": function() {
           $( this ).dialog( "close" );
+		  gdpr = true;
         }
       }
     });
@@ -251,7 +253,10 @@ setInterval(getAlertDevices,1000);
 		</div>
 
 		<div id="dialog-confirm" title="Datenschutzerklärung">
-  			<p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>Diese App sendet Bewegungsdaten (Beschleunigungs- und Lageinformationen) ihres Gerätes ins Internet. Die Daten werden zum Zwecke des QUNIS Day 2018 Analytic Showcases erhoben und analysiert. Die Daten werden nach dem QUNIS Day 2018 gelöscht, eine andere Verwendung findet nicht statt.</p>
+			  <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>Diese App sendet Bewegungsdaten (Beschleunigungs- und Lageinformationen) ihres Gerätes ins Internet. 
+			  Die Daten werden zum Zwecke des QUNIS Day 2018 Analytic Showcases erhoben und analysiert. 
+			  Die Daten werden nach dem QUNIS Day 2018 unwiederbrinlich gelöscht. Eine andere Verwendung der Daten findet nicht statt.
+			Mit klick auf den "Ok" Button akzeptieren Sie diese Bedingungen und starten die Datenübertragung.</p>
 		</div>
 
 		
@@ -369,37 +374,39 @@ setInterval(getAlertDevices,1000);
                 
 
                 function sendMotion2Ehub(){
-					addChartPoint(az_diff);
-                    <?php
-                    function generateSasToken($uri, $sasKeyName, $sasKeyValue) 
-                    { 
-                        $targetUri = strtolower(rawurlencode(strtolower($uri))); 
-                        $expires = time();     
-                        $expiresInMins = 60; 
-                        $week = 60*60*24*7;
-                        $expires = $expires + $week; 
-                        $toSign = $targetUri . "\n" . $expires; 
-                        $signature = rawurlencode(base64_encode(hash_hmac('sha256',             
-                        $toSign, $sasKeyValue, TRUE))); 
-                    
-                        $token = "SharedAccessSignature sr=" . $targetUri . "&sig=" . $signature . "&se=" . $expires .         "&skn=" . $sasKeyName; 
-                        return $token; 
-                    }
-                    echo 'var token = "'.generateSasToken(getenv('naspUrl'),getenv('naspPolicyName'),getenv('naspPolicyKey')).'";';
-                    ?>
+					if(gdpr){
+						addChartPoint(az_diff);
+						<?php
+						function generateSasToken($uri, $sasKeyName, $sasKeyValue) 
+						{ 
+							$targetUri = strtolower(rawurlencode(strtolower($uri))); 
+							$expires = time();     
+							$expiresInMins = 60; 
+							$week = 60*60*24*7;
+							$expires = $expires + $week; 
+							$toSign = $targetUri . "\n" . $expires; 
+							$signature = rawurlencode(base64_encode(hash_hmac('sha256',             
+							$toSign, $sasKeyValue, TRUE))); 
+						
+							$token = "SharedAccessSignature sr=" . $targetUri . "&sig=" . $signature . "&se=" . $expires .         "&skn=" . $sasKeyName; 
+							return $token; 
+						}
+						echo 'var token = "'.generateSasToken(getenv('naspUrl'),getenv('naspPolicyName'),getenv('naspPolicyKey')).'";';
+						?>
 
-                    var http = new XMLHttpRequest();
-                    var headers = {Authorization : token};
-                    var url = "https://<?php echo getenv('naspUrl'); ?>/<?php echo getenv('ehubName'); ?>/messages?timeout=60&api-version=2014-01";
+						var http = new XMLHttpRequest();
+						var headers = {Authorization : token};
+						var url = "https://<?php echo getenv('naspUrl'); ?>/<?php echo getenv('ehubName'); ?>/messages?timeout=60&api-version=2014-01";
 
-                    http.open("POST",url, true);
-                    http.setRequestHeader("Authorization",token);
-                    http.send(  "{'deviceId': '"+fingerprint+"',"+
-                                "'x_accel': "+ax+","+
-                                "'y_accel': "+ay+","+
-                                "'z_accel': "+az+","+
-                                "'z_diff': "+az_diff+","+
-                                "'quakeDetected': "+quakeDetected+"}");
+						http.open("POST",url, true);
+						http.setRequestHeader("Authorization",token);
+						http.send(  "{'deviceId': '"+fingerprint+"',"+
+									"'x_accel': "+ax+","+
+									"'y_accel': "+ay+","+
+									"'z_accel': "+az+","+
+									"'z_diff': "+az_diff+","+
+									"'quakeDetected': "+quakeDetected+"}");
+					}
                     
                 }
  
