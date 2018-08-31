@@ -143,7 +143,7 @@ function getAlertDevices(){
             alertDevices = obj2.count;
         }
 
-        if(parseInt(alertDevices) > 1){blinkit();}
+        if(parseInt(alertDevices) > 3){blinkit();}
        $('#alertDevices').html("<p style='font-size:3em;'><b>"+alertDevices+"</b></p>");
     });
 }
